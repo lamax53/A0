@@ -2,5 +2,7 @@
 *
 !*.*
 !Makefile
+!.c
 
 *.o
+*.tsv
