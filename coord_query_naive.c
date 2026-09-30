@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <errno.h>
 #include <assert.h>
+#include <math.h>
 
 #include "record.h"
 #include "coord_query.h"
@@ -15,18 +16,34 @@ struct naive_data {
 };
 
 struct naive_data* mk_naive(struct record* rs, int n) {
-  assert(0);
-  // TODO
+  struct naive_data *data = malloc(sizeof(struct naive_data));
+  assert(data != NULL);
+
+  data->rs = rs;
+  data->n = n;
+  return data;
 }
 
 void free_naive(struct naive_data* data) {
-  assert(0);
-  // TODO
+  free(data);
 }
 
 const struct record* lookup_naive(struct naive_data *data, double lon, double lat) {
-  assert(0);
-  // TODO
+  const struct record* closest = NULL;
+  double best_distance = INFINITY;
+
+  for (int i = 0; i < data->n; i++) {
+    double lon_diff = data->rs[i].lon - lon;
+    double lat_diff = data->rs[i].lat - lat;
+    double distance_squared = lon_diff * lon_diff + lat_diff * lat_diff;
+
+    if (closest == NULL || distance_squared < best_distance) {
+      closest = &data->rs[i];
+      best_distance = distance_squared;
+    }
+  }
+
+  return closest;
 }
 
 int main(int argc, char** argv) {
